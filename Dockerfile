@@ -179,6 +179,10 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+RUN set -xe && \
+    mkdir -p /usr/local/include/catch2 && \
+    wget https://raw.githubusercontent.com/catchorg/Catch2/refs/tags/v2.13.8/single_include/catch2/catch.hpp -P /usr/local/include/catch2
+
 # Check for latest version here: https://hub.docker.com/_/mono
 # I currently use this to add support for Visual Basic.Net but this can be also
 # used to support C# language which has been already supported but with manual
