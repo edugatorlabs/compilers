@@ -27,6 +27,7 @@ FROM buildpack-deps:bookworm
 #    done
 
 # Check for latest version here: https://www.python.org/downloads
+# python3.11 is already installed
 #ENV PYTHON_VERSIONS \
 #      3.8.1 \
 #      3.12.7 \
