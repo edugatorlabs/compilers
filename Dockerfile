@@ -27,35 +27,35 @@ FROM buildpack-deps:bookworm
 #    done
 
 # Check for latest version here: https://www.python.org/downloads
-ENV PYTHON_VERSIONS \
-      3.8.1 \
-      3.12.7 \
-      2.7.17
-RUN set -xe && \
-    for VERSION in $PYTHON_VERSIONS; do \
-      curl -fSsL "https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz" -o /tmp/python-$VERSION.tar.xz && \
-      mkdir /tmp/python-$VERSION && \
-      tar -xf /tmp/python-$VERSION.tar.xz -C /tmp/python-$VERSION --strip-components=1 && \
-      rm /tmp/python-$VERSION.tar.xz && \
-      cd /tmp/python-$VERSION && \
-      ./configure \
-        --prefix=/usr/local/python-$VERSION && \
-      make -j$(nproc) && \
-      make -j$(nproc) install && \
-      rm -rf /tmp/*; \
-    done
+#ENV PYTHON_VERSIONS \
+#      3.8.1 \
+#      3.12.7 \
+#      2.7.17
+#RUN set -xe && \
+#    for VERSION in $PYTHON_VERSIONS; do \
+#      curl -fSsL "https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz" -o /tmp/python-$VERSION.tar.xz && \
+#      mkdir /tmp/python-$VERSION && \
+#      tar -xf /tmp/python-$VERSION.tar.xz -C /tmp/python-$VERSION --strip-components=1 && \
+#      rm /tmp/python-$VERSION.tar.xz && \
+#      cd /tmp/python-$VERSION && \
+#      ./configure \
+#        --prefix=/usr/local/python-$VERSION && \
+#      make -j$(nproc) && \
+#      make -j$(nproc) install && \
+#      rm -rf /tmp/*; \
+#    done
 
 
 # Check for latest version here: https://jdk.java.net
-#RUN set -xe && \
-#    curl -fSsL "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz" -o /tmp/openjdk21.tar.gz && \
-#    mkdir /usr/local/openjdk21 && \
-#    tar -xf /tmp/openjdk21.tar.gz -C /usr/local/openjdk21 --strip-components=1 && \
-#    rm /tmp/openjdk21.tar.gz && \
-#    ln -s /usr/local/openjdk21/bin/javac /usr/local/bin/javac && \
-#    ln -s /usr/local/openjdk21/bin/java /usr/local/bin/java && \
-#    ln -s /usr/local/openjdk21/bin/jar /usr/local/bin/jar
-#
+RUN set -xe && \
+    curl -fSsL "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz" -o /tmp/openjdk21.tar.gz && \
+    mkdir /usr/local/openjdk21 && \
+    tar -xf /tmp/openjdk21.tar.gz -C /usr/local/openjdk21 --strip-components=1 && \
+    rm /tmp/openjdk21.tar.gz && \
+    ln -s /usr/local/openjdk21/bin/javac /usr/local/bin/javac && \
+    ln -s /usr/local/openjdk21/bin/java /usr/local/bin/java && \
+    ln -s /usr/local/openjdk21/bin/jar /usr/local/bin/jar
+
 ## Check for latest version here: https://ftpmirror.gnu.org/bash
 #ENV BASH_VERSIONS \
 #      5.0
@@ -72,30 +72,10 @@ RUN set -xe && \
 #      make -j$(nproc) install && \
 #      rm -rf /tmp/*; \
 #    done
-#
-## Check for latest version here: https://www.mono-project.com/download/stable
-#ENV MONO_VERSIONS \
-#      6.6.0.161
-#RUN set -xe && \
-#    apt-get update && \
-#    apt-get install -y --no-install-recommends cmake && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    for VERSION in $MONO_VERSIONS; do \
-#      curl -fSsL "https://download.mono-project.com/sources/mono/mono-$VERSION.tar.xz" -o /tmp/mono-$VERSION.tar.xz && \
-#      mkdir /tmp/mono-$VERSION && \
-#      tar -xf /tmp/mono-$VERSION.tar.xz -C /tmp/mono-$VERSION --strip-components=1 && \
-#      rm /tmp/mono-$VERSION.tar.xz && \
-#      cd /tmp/mono-$VERSION && \
-#      ./configure \
-#        --prefix=/usr/local/mono-$VERSION && \
-#      make -j$(nproc) && \
-#      make -j$(proc) install && \
-#      rm -rf /tmp/*; \
-#    done
-#
-## Check for latest version here: https://nodejs.org/en
+
+# Check for latest version here: https://nodejs.org/en
 #ENV NODE_VERSIONS \
-#      12.14.0
+#      22.12.0
 #RUN set -xe && \
 #    for VERSION in $NODE_VERSIONS; do \
 #      curl -fSsL "https://nodejs.org/dist/v$VERSION/node-v$VERSION.tar.gz" -o /tmp/node-$VERSION.tar.gz && \
@@ -109,10 +89,10 @@ RUN set -xe && \
 #      make -j$(nproc) install && \
 #      rm -rf /tmp/*; \
 #    done
-#
-## Check for latest version here: https://www.rust-lang.org
+
+# Check for latest version here: https://www.rust-lang.org
 #ENV RUST_VERSIONS \
-#      1.40.0
+#      1.83.0
 #RUN set -xe && \
 #    for VERSION in $RUST_VERSIONS; do \
 #      curl -fSsL "https://static.rust-lang.org/dist/rust-$VERSION-x86_64-unknown-linux-gnu.tar.gz" -o /tmp/rust-$VERSION.tar.gz && \
@@ -137,17 +117,7 @@ RUN set -xe && \
 #      rm -rf /tmp/*; \
 #    done
 #
-## Check for latest version here: https://sourceforge.net/projects/fbc/files/Binaries%20-%20Linux
-#ENV FBC_VERSIONS \
-#      1.07.1
-#RUN set -xe && \
-#    for VERSION in $FBC_VERSIONS; do \
-#      curl -fSsL "https://downloads.sourceforge.net/project/fbc/Binaries%20-%20Linux/FreeBASIC-$VERSION-linux-x86_64.tar.gz" -o /tmp/fbc-$VERSION.tar.gz && \
-#      mkdir /usr/local/fbc-$VERSION && \
-#      tar -xf /tmp/fbc-$VERSION.tar.gz -C /usr/local/fbc-$VERSION --strip-components=1 && \
-#      rm -rf /tmp/*; \
-#    done
-#
+
 ## Check for latest version here: https://github.com/microsoft/TypeScript/releases
 #ENV TYPESCRIPT_VERSIONS \
 #      3.7.4
@@ -175,27 +145,6 @@ RUN set -xe && \
 #RUN set -xe && \
 #    mkdir -p /usr/local/include/catch2 && \
 #    wget https://raw.githubusercontent.com/catchorg/Catch2/refs/tags/v2.13.8/single_include/catch2/catch.hpp -P /usr/local/include/catch2
-#
-## Check for latest version here: https://hub.docker.com/_/mono
-## I currently use this to add support for Visual Basic.Net but this can be also
-## used to support C# language which has been already supported but with manual
-## installation of Mono (see above).
-#ENV MONO_VERSION 6.6.0.161
-#RUN set -xe && \
-#    apt-get update && \
-#    apt-get install -y --no-install-recommends gnupg dirmngr && \
-#    rm -rf /var/lib/apt/lists/* && \
-#    export GNUPGHOME="$(mktemp -d)" && \
-#    gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-#    gpg --batch --export --armor 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF > /etc/apt/trusted.gpg.d/mono.gpg.asc && \
-#    gpgconf --kill all && \
-#    rm -rf "$GNUPGHOME" && \
-#    apt-key list | grep Xamarin && \
-#    apt-get purge -y --auto-remove gnupg dirmngr && \
-#    echo "deb http://download.mono-project.com/repo/debian stable-stretch/snapshots/$MONO_VERSION main" > /etc/apt/sources.list.d/mono-official-stable.list && \
-#    apt-get update && \
-#    apt-get install -y --no-install-recommends mono-vbnc && \
-#    rm -rf /var/lib/apt/lists/* /tmp/*
 #
 ## Check for latest version here: https://packages.debian.org/buster/clang-7
 ## Used for additional compilers for C, C++ and used for Objective-C.
