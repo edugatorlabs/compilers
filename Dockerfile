@@ -116,7 +116,7 @@ RUN set -xe && \
       curl -fSsL "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" -o /tmp/node.tar.xz && \
       mkdir -p /usr/local/node-$NODE_VERSION && \
       tar -xf /tmp/node.tar.xz -C /usr/local/node-$NODE_VERSION --strip-components=1 && \
-      rm /tmp/node.tar.xz
+      rm /tmp/node.tar.xz; \
     done
 
 RUN ln -s /usr/local/node-22.12.0/bin/node /usr/bin/node && \
