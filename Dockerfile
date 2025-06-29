@@ -68,8 +68,11 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+# Make Python 3.12.7 the default globally
 RUN ln -sf /usr/local/python-3.12.7/bin/python3 /usr/bin/python3 && \
-    ln -sf /usr/local/python-3.12.7/bin/python3 /usr/bin/python
+    ln -sf /usr/local/python-3.12.7/bin/python3 /usr/bin/python && \
+    ln -sf /usr/local/python-3.12.7/bin/pip3 /usr/bin/pip3 && \
+    ln -sf /usr/local/python-3.12.7/bin/pip3 /usr/bin/pip
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PYTHONWARNINGS=ignore
