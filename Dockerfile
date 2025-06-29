@@ -26,6 +26,24 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+# Check for latest version here: https://www.ruby-lang.org/en/downloads
+ENV RUBY_VERSIONS \
+      2.7.0
+RUN set -xe && \
+    for VERSION in $RUBY_VERSIONS; do \
+      curl -fSsL "https://cache.ruby-lang.org/pub/ruby/${VERSION%.*}/ruby-$VERSION.tar.gz" -o /tmp/ruby-$VERSION.tar.gz && \
+      mkdir /tmp/ruby-$VERSION && \
+      tar -xf /tmp/ruby-$VERSION.tar.gz -C /tmp/ruby-$VERSION --strip-components=1 && \
+      rm /tmp/ruby-$VERSION.tar.gz && \
+      cd /tmp/ruby-$VERSION && \
+      ./configure \
+        --disable-install-doc \
+        --prefix=/usr/local/ruby-$VERSION && \
+      make -j$(nproc) && \
+      make -j$(nproc) install && \
+      rm -rf /tmp/*; \
+    done
+
 # Check for latest version here: https://www.python.org/downloads
 # python3.11 is already installed
 ENV PYTHON_VERSIONS \
