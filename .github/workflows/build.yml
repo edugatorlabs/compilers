@@ -1,0 +1,40 @@
+name: Build Judge0 Compilers Image
+
+on:
+  release:
+    types: [published]
+
+env:
+  ACCOUNT_ID: 990066513532
+  AWS_REGION: us-east-1
+  ECR_REPO: edugatorlabs/judge0-compilers
+  PIPELINE_ID: ${{ github.run_id }}-${{ github.run_number }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/GitHubDeploymentRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} \
+            | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+      - name: Build, Tag, and Push Docker image to ECR
+        run: |
+          IMAGE_URI=${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ env.PIPELINE_ID }}
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
