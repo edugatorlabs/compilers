@@ -113,17 +113,15 @@ ENV NODE_VERSIONS \
       22.12.0
 RUN set -xe && \
     for VERSION in $NODE_VERSIONS; do \
-      curl -fSsL "https://nodejs.org/dist/v$VERSION/node-v$VERSION.tar.gz" -o /tmp/node-$VERSION.tar.gz && \
-      mkdir /tmp/node-$VERSION && \
-      tar -xf /tmp/node-$VERSION.tar.gz -C /tmp/node-$VERSION --strip-components=1 && \
-      rm /tmp/node-$VERSION.tar.gz && \
-      cd /tmp/node-$VERSION && \
-      ./configure \
-        --prefix=/usr/local/node-$VERSION && \
-      make -j$(nproc) && \
-      make -j$(nproc) install && \
-      rm -rf /tmp/*; \
+      curl -fSsL "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" -o /tmp/node.tar.xz && \
+      mkdir -p /usr/local/node-$NODE_VERSION && \
+      tar -xf /tmp/node.tar.xz -C /usr/local/node-$NODE_VERSION --strip-components=1 && \
+      rm /tmp/node.tar.xz
     done
+
+RUN ln -s /usr/local/node-22.12.0/bin/node /usr/bin/node && \
+    ln -s /usr/local/node-22.12.0/bin/npm /usr/bin/npm && \
+    ln -s /usr/local/node-22.12.0/bin/npx /usr/bin/npx
 
 # Check for latest version here: https://www.rust-lang.org
 ENV RUST_VERSIONS \
