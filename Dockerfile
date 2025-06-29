@@ -45,11 +45,15 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+# Change default gcc / g++ after Ruby installation
+# Ruby 2.7.0 needs gcc-8.0
+RUN ln -sf /usr/local/gcc-12.1.0/bin/gcc /usr/bin/gcc && \
+    ln -sf /usr/local/gcc-12.1.0/bin/g++ /usr/bin/g++
+
 # Check for latest version here: https://www.python.org/downloads
 # python3.11 is already installed
 ENV PYTHON_VERSIONS \
-      3.12.7 \
-      2.7.17
+      3.12.7
 RUN set -xe && \
     for VERSION in $PYTHON_VERSIONS; do \
       curl -fSsL "https://www.python.org/ftp/python/$VERSION/Python-$VERSION.tar.xz" -o /tmp/python-$VERSION.tar.xz && \
@@ -64,11 +68,15 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+RUN ln -sf /usr/local/python-3.12.7/bin/python3 /usr/bin/python3 && \
+    ln -sf /usr/local/python-3.12.7/bin/python3 /usr/bin/python
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONWARNINGS=ignore
 # Install pandas and numpy on python 3.12
-# After Python installs
 RUN set -xe && \
-    /usr/local/python-3.12.7/bin/python3 -m ensurepip && \
-    /usr/local/python-3.12.7/bin/pip3 install --no-cache-dir pandas numpy
+    python3 -m ensurepip && \
+    pip3 install --no-cache-dir pandas numpy
 
 # Check for latest version here: https://jdk.java.net
 RUN set -xe && \
