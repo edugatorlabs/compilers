@@ -45,6 +45,12 @@ RUN set -xe && \
       rm -rf /tmp/*; \
     done
 
+# Install pandas and numpy on python 3.12
+# After Python installs
+RUN set -xe && \
+    /usr/local/python-3.12.7/bin/python3 -m ensurepip && \
+    /usr/local/python-3.12.7/bin/pip3 install --no-cache-dir pandas numpy
+
 # Check for latest version here: https://jdk.java.net
 RUN set -xe && \
     curl -fSsL "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz" -o /tmp/openjdk21.tar.gz && \
@@ -128,32 +134,6 @@ RUN set -xe && \
 #      npm install -g typescript@$VERSION; \
 #    done
 
-## Check for latest version here: https://kotlinlang.org
-#ENV KOTLIN_VERSIONS \
-#      1.3.70
-#RUN set -xe && \
-#    for VERSION in $KOTLIN_VERSIONS; do \
-#      curl -fSsL "https://github.com/JetBrains/kotlin/releases/download/v$VERSION/kotlin-compiler-$VERSION.zip" -o /tmp/kotlin-$VERSION.zip && \
-#      unzip -d /usr/local/kotlin-$VERSION /tmp/kotlin-$VERSION.zip && \
-#      mv /usr/local/kotlin-$VERSION/kotlinc/* /usr/local/kotlin-$VERSION/ && \
-#      rm -rf /usr/local/kotlin-$VERSION/kotlinc && \
-#      rm -rf /tmp/*; \
-#    done
-
-## Check for latest version here: https://packages.debian.org/buster/clang-7
-## Used for additional compilers for C, C++ and used for Objective-C.
-#RUN set -xe && \
-#    apt-get update && \
-#    apt-get install -y --no-install-recommends clang-7 gnustep-devel && \
-#    rm -rf /var/lib/apt/lists/*
-#
-## Check for latest version here: https://packages.debian.org/buster/sqlite3
-## Used for support of SQLite.
-#RUN set -xe && \
-#    apt-get update && \
-#    apt-get install -y --no-install-recommends sqlite3 && \
-#    rm -rf /var/lib/apt/lists/*
-
 RUN set -xe && \
     mkdir -p /usr/local/include/catch2 && \
     wget https://raw.githubusercontent.com/catchorg/Catch2/refs/tags/v2.13.8/single_include/catch2/catch.hpp -P /usr/local/include/catch2
@@ -182,5 +162,5 @@ RUN set -xe && \
     rm -rf /tmp/*
 ENV BOX_ROOT /var/local/lib/isolate
 
-LABEL maintainer="edugatorlabs <csinfraweb@gmail.com>"
+LABEL maintainer="edugatorlabs <edugatorlabs@gmail.com>"
 LABEL version="0.0.1"
