@@ -168,8 +168,9 @@ RUN set -xe && \
 
 # Precompile test_main.cpp to speed up test builds
 RUN set -xe && \
-    echo '#define CATCH_CONFIG_MAIN' > /tmp/test_main.cpp && \
+    echo '#define CATCH_CONFIG_RUNNER' > /tmp/test_main.cpp && \
     echo '#include <catch2/catch.hpp>' >> /tmp/test_main.cpp && \
+    echo 'int main(int argc, char* argv[]) { Catch::Session().run(argc, argv); return 0; }' >> /tmp/test_main.cpp && \
     g++ -std=c++17 -O2 -c /tmp/test_main.cpp -o /usr/local/lib/libcatch2_main.o && \
     rm /tmp/test_main.cpp
 
