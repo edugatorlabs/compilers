@@ -166,6 +166,13 @@ RUN set -xe && \
     mkdir -p /usr/local/include/catch2 && \
     wget https://raw.githubusercontent.com/catchorg/Catch2/refs/tags/v2.13.8/single_include/catch2/catch.hpp -P /usr/local/include/catch2
 
+# Precompile test_main.cpp to speed up test builds
+RUN set -xe && \
+    echo '#define CATCH_CONFIG_MAIN' > /tmp/test_main.cpp && \
+    echo '#include <catch2/catch.hpp>' >> /tmp/test_main.cpp && \
+    g++ -std=c++17 -O2 -c /tmp/test_main.cpp -o /usr/local/lib/libcatch2_main.o && \
+    rm /tmp/test_main.cpp
+
 RUN set -xe && \
     mkdir -p /usr/local/junit && \
     wget https://repo1.maven.org/maven2/junit/junit/4.13.2/junit-4.13.2.jar -P /usr/local/junit && \
