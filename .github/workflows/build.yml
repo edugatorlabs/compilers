@@ -7,6 +7,10 @@ on:
         description: "Publish to ECR?"
         required: false
         default: "false"
+      variant:
+        description: "Which Docker variant to build (default: full, slim: slim/Dockerfile)"
+        required: false
+        default: "full"
   release:
     types: [published]
 
@@ -42,8 +46,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_URI=${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ env.PIPELINE_ID }}
-          docker build -t $IMAGE_URI .
+          # Determine Dockerfile and image tag
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.variant }}" == "slim" ]]; then
+            DOCKERFILE_PATH=slim/Dockerfile
+            IMAGE_TAG=slim-${{ env.PIPELINE_ID }}
+          else
+            DOCKERFILE_PATH=Dockerfile
+            IMAGE_TAG=${{ env.PIPELINE_ID }}
+          fi
+
+          IMAGE_URI=${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:$IMAGE_TAG
+          
+          echo "Building Docker image from $DOCKERFILE_PATH..."
+          docker build -f $DOCKERFILE_PATH -t $IMAGE_URI .
           echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
       - name: Push Docker image to ECR (only if publishing)
