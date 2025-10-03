@@ -1,4 +1,4 @@
-name: Build Judge0 Compilers Image
+name: Build Judge0 Compilers Image (or Publish to ECR)
 
 on:
   workflow_dispatch:
